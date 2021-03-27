@@ -7,7 +7,6 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.location.LocationManager.*
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -21,8 +20,7 @@ class MainActivity : AppCompatActivity() {
         val TAG = "xyz"
     }
 
-    private val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,
-                                      Manifest.permission.ACCESS_COARSE_LOCATION)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,12 +29,14 @@ class MainActivity : AppCompatActivity() {
         requestPermissions()
     }
 
+    private val permissions = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION)
+
     private fun requestPermissions() {
         if (!isPermissionGiven()) {
             Log.d(TAG, "permission denied to USE GPS - requesting it")
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
                 requestPermissions(permissions, 1)
-            return
         } else
             Log.d(TAG, "permission to USE GPS granted!")
     }
@@ -54,8 +54,11 @@ class MainActivity : AppCompatActivity() {
             tvCurrentLocation.text = "No permission given"
             return
         }
+
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        val location = locationManager.getLastKnownLocation(GPS_PROVIDER)
+        val location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        // The type of location is Location? - it can be null... handle cases
+
         if (location != null) {
             tvCurrentLocation.text = "Location = ${location.latitude}, ${location.longitude}"
         } else
@@ -89,7 +92,7 @@ class MainActivity : AppCompatActivity() {
             }
 
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        locationManager.requestLocationUpdates(GPS_PROVIDER,
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
                 1000,
                 5.0F,
                 myLocationListener!!)
