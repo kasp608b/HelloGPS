@@ -89,12 +89,16 @@ class MainActivity : AppCompatActivity() {
                     tvCurrentLocation.text = "Location = ${location.latitude}, ${location.longitude}"
                     counter.text = "Count = $count"
                 }
+
+                override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                   
+                }
             }
 
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                1000,
-                5.0F,
+                0,
+                0.0F,
                 myLocationListener!!)
 
     }
